@@ -1,0 +1,29 @@
+.settings-sidebar {
+  background: #fff;
+}
+
+.settings-sidebar .list-group-item {
+  border: none;
+  border-radius: 8px;
+  color: #444;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.settings-sidebar .list-group-item:hover {
+  background-color: #f8f9fa;
+  color: #0d6efd;
+  transform: translateX(3px);
+}
+
+.settings-sidebar .list-group-item.active {
+  background-color: #e7f1ff;
+  color: #0d6efd;
+  font-weight: 600;
+  border-left: 4px solid #0d6efd;
+}
+
+.settings-sidebar .sidebar-icon {
+  font-size: 1.1rem;
+  color: inherit;
+}
