@@ -4,7 +4,7 @@ import axios from "axios";
 // Axios instance
 //
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/", 
+  baseURL: "http://127.0.0.1:8000/api/",
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
@@ -48,7 +48,7 @@ api.interceptors.response.use(
         localStorage.setItem("access", data.access);
 
         originalRequest.headers.Authorization = `Bearer ${data.access}`;
-        return api(originalRequest); 
+        return api(originalRequest);
       } catch (refreshError) {
         clearAuthTokens();
 
@@ -62,6 +62,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 //
 // Auth API
 //
@@ -78,46 +79,83 @@ export const authAPI = {
   resetPassword: (uid, token, data) =>
     api.post(`users/auth/password/reset/confirm/${uid}/${token}/`, data),
 
-  //  Google OAuth
+  // Google OAuth
   googleLogin: (data) => api.post("users/auth/google/login/", data),
   googleSignup: (data) => api.post("users/auth/google/signup/", data),
 };
 
-//
-// Users API
-//
 export const usersAPI = {
   // Get specific user by ID
-  getUser: (userId) => api.get(`users/${userId}/`),
+  getUser: (userId) => api.get(`users/users/${userId}/`),
 
   // Get current authenticated user
-  getMe: () => api.get("users/me/"),
+  getMe: () => api.get("users/user/me/"),
 
   // Alias for getMe for consistency
   getProfile: (userId) => {
     if (userId === "me" || !userId) {
-      return api.get("users/me/");
+      return api.get("users/user/me/");
     } else {
-      return api.get(`users/${userId}/`);
+      return api.get(`users/users/${userId}/`);
     }
   },
+  updateProfile: (formData) => api.patch("users/user/me/", formData),
 
-  updateProfile: (data) => api.patch("auth/profile/update/", data),
+  updateProfilePicture: (formData, method = "patch") =>
+    api[method]("users/user/me/", formData),
 
-  updateProfilePicture: (formData) =>
-    api.patch("auth/profile/update/", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+  // Search users
+  searchUsers: (query) => api.get(`users/users/?search=${query}`),
+
+  // 🔒 Privacy Settings
+  getPrivacySettings: () => api.get("users/privacy-settings/"),
+  updatePrivacySettings: (data) => api.patch("users/privacy-settings/", data),
+
+  // 🚫 Block/Unblock Users
+  blockUser: (userId) => api.post(`users/users/${userId}/block/`),
+  unblockUser: (userId) => api.post(`users/users/${userId}/unblock/`),
+  getBlockedUsers: () => api.get("users/blocked-users/"),
+
+  // 👥 User Relationships
+  getFriends: (userId) => api.get(`users/users/${userId}/friends/`),
+  getPendingRequests: (userId) =>
+    api.get(`users/users/${userId}/pending_requests_received/`),
+  getSentRequests: (userId) =>
+    api.get(`users/users/${userId}/pending_requests_sent/`),
+
+  // Follow/Unfollow
+  followUser: (userId) => api.post(`users/users/${userId}/follow/`),
+  unfollowUser: (userId) => api.post(`users/users/${userId}/unfollow/`),
+};
+
+//
+// 🔒 Privacy & Blocking API
+//
+export const privacyAPI = {
+  // Privacy Settings
+  getSettings: () => api.get("users/privacy-settings/"),
+  updateSettings: (data) => api.patch("users/privacy-settings/", data),
+
+  // Blocked Users Management
+  getBlockedUsers: () => api.get("users/blocked-users/"),
+  blockUser: (userId, reason = "") =>
+    api.post("users/blocked-users/", {
+      user_id: userId,
+      reason,
     }),
+  unblockUser: (userId) => api.delete(`users/blocked-users/${userId}/`),
 
-  searchUsers: (query) => api.get(`users/?search=${query}`), 
+  // Quick block/unblock via user endpoint
+  quickBlock: (userId) => api.post(`users/users/${userId}/block/`),
+  quickUnblock: (userId) => api.post(`users/users/${userId}/unblock/`),
 };
 
 //
 // Settings API
 //
 export const settingsAPI = {
-  getSettings: () => api.get("settings/"),
-  updateSettings: (data) => api.patch("settings/", data),
+  getSettings: () => api.get("users/settings/"),
+  updateSettings: (data) => api.patch("users/settings/", data),
 };
 
 //
@@ -131,6 +169,11 @@ export const friendsAPI = {
     api.post(`users/friendships/${friendshipId}/accept/`),
   decline: (friendshipId) =>
     api.post(`users/friendships/${friendshipId}/decline/`),
+
+  // Blocking (convenience methods)
+  blockUser: (userId) => api.post(`users/users/${userId}/block/`),
+  unblockUser: (userId) => api.post(`users/users/${userId}/unblock/`),
+  getBlockedList: () => api.get("users/blocked-users/"),
 };
 
 //
@@ -148,7 +191,7 @@ export const postsAPI = {
 };
 
 //
-// 🔧 Stories API
+// Stories API
 //
 export const storiesAPI = {
   getStories: () => api.get("stories/"),
@@ -160,7 +203,7 @@ export const storiesAPI = {
 };
 
 //
-// 🔧 Comments API
+// Comments API
 //
 export const commentsAPI = {
   // List comments for a post
@@ -183,7 +226,9 @@ export const commentsAPI = {
   getCommentThread: (id) => api.get(`comments/comments/${id}/`),
 };
 
-// 🔧 Reactions API
+//
+// Reactions API
+//
 export const reactionsAPI = {
   // ✅ Toggle a reaction (like/unlike, etc.)
   toggleReaction: (data) => api.post("reactions/reactions/toggle/", data),
@@ -195,13 +240,13 @@ export const reactionsAPI = {
   removeReaction: (id) => api.delete(`reactions/reactions/${id}/`),
 
   // List reactions for a post
-  getPostReactions: (postId) =>
-    api.get(`reactions/reactions/?post=${postId}`),
+  getPostReactions: (postId) => api.get(`reactions/reactions/?post=${postId}`),
 
   // List reactions for a comment
   getCommentReactions: (commentId) =>
     api.get(`reactions/reactions/?comment=${commentId}`),
 };
+
 //
 // 🔧 Utils
 //

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FaHome,
@@ -7,53 +7,20 @@ import {
   FaEnvelope,
   FaSearch,
   FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { MdDarkMode } from "react-icons/md";
-import { usersAPI } from "../api/axios";
 import ProfileDropdown from "./ProfileDropdown";
 import "./Navbar.css";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar({ onLogout }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch current logged-in user
-  const fetchUser = async () => {
-    try {
-      setLoading(true);
-      const res = await usersAPI.getMe();
-      console.log("User data received:", res.data); // Debug log
-      console.log("Avatar URL:", res.data.profile?.avatar); // Debug log
-      setUser(res.data);
-    } catch (err) {
-      console.error("Failed to fetch current user:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  // Function to get the full avatar URL
-  const getAvatarUrl = (avatarPath) => {
-    if (!avatarPath) {
-      return "https://via.placeholder.com/40"; // Default placeholder
-    }
-
-    // If it's already a full URL, return as is
-    if (avatarPath.startsWith("http")) {
-      return avatarPath;
-    }
-
-    // If it's a relative path, construct the full URL
-    return `http://localhost:8000${avatarPath}`;
-  };
+  const { currentUser, loading, isAuthenticated } = useAuth();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   if (loading) {
     return (
-      <nav className="navbar navbar-expand-lg navbar-light shadow-sm sticky-top px-3 bg-custom-nav">
+      <nav className="navbar navbar-expand-lg navbar-light shadow-sm sticky-top bg-custom-nav">
         <div className="container-fluid">
           <div className="text-white">Loading...</div>
         </div>
@@ -62,71 +29,229 @@ function Navbar({ onLogout }) {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light shadow-sm sticky-top px-3 bg-custom-nav">
-      <div className="container-fluid flex-column flex-md-row">
-        {/* Row 1: Logo + Search */}
-        <div className="d-flex w-100 justify-content-between align-items-center mb-2 mb-md-0">
-          <Link
-            to="/dashboard"
-            className="fw-bold fs-4 text-decoration-none text-white"
-          >
-            IGSSAX
-          </Link>
+    <>
+      {/* Main Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-light shadow-sm sticky-top bg-custom-nav">
+        <div className="container-fluid">
+          {/* Desktop Layout */}
+          <div className="d-none d-lg-flex w-100 align-items-center">
+            {/* Logo */}
+            <Link
+              to="/dashboard"
+              className="fw-bold fs-3 text-decoration-none text-white me-4"
+            >
+              IGSSAX
+            </Link>
 
-          <div className="position-relative d-none d-md-block">
-            <input
-              type="text"
-              placeholder="Search IGSSAX"
-              className="form-control rounded-pill ps-5"
-              style={{ width: "260px" }}
-            />
-            <FaSearch
-              className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
-              size={16}
-            />
+            {/* Search Bar */}
+            <div
+              className="position-relative flex-grow-1 mx-4"
+              style={{ maxWidth: "600px" }}
+            >
+              <input
+                type="text"
+                placeholder="Search IGSSAX"
+                className="form-control rounded-pill ps-5 border-0 shadow-sm"
+              />
+              <FaSearch
+                className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                size={16}
+              />
+            </div>
+
+            {/* Navigation Icons */}
+            <div className="d-flex align-items-center gap-3">
+              <Link
+                to="/dashboard"
+                className="text-white nav-icon position-relative"
+              >
+                <FaHome size={22} />
+                <div className="nav-tooltip">Home</div>
+              </Link>
+              <Link
+                to="/friends"
+                className="text-white nav-icon position-relative"
+              >
+                <FaUserFriends size={22} />
+                <div className="nav-tooltip">Friends</div>
+              </Link>
+              <Link
+                to="/messages"
+                className="text-white nav-icon position-relative"
+              >
+                <FaEnvelope size={22} />
+                <div className="nav-tooltip">Messages</div>
+              </Link>
+              <Link
+                to="/notifications"
+                className="text-white nav-icon position-relative"
+              >
+                <FaBell size={22} />
+                <div className="nav-tooltip">Notifications</div>
+              </Link>
+              <button className="btn btn-light rounded-circle p-2 nav-icon">
+                <MdDarkMode size={18} />
+                <div className="nav-tooltip">Theme</div>
+              </button>
+
+              {/* Profile Dropdown */}
+              {isAuthenticated ? (
+                <ProfileDropdown user={currentUser} onLogout={onLogout} />
+              ) : (
+                <div className="text-white">Not logged in</div>
+              )}
+            </div>
           </div>
 
-          <button className="btn d-md-none text-white">
-            <FaBars size={22} />
-          </button>
-        </div>
+          {/* Mobile Layout */}
+          <div className="d-flex d-lg-none w-100 flex-column">
+            {/* Row 1: Logo + Search + Menu */}
+            <div className="d-flex w-100 justify-content-between align-items-center mb-2">
+              <Link
+                to="/dashboard"
+                className="fw-bold fs-4 text-decoration-none text-white"
+              >
+                IGSSAX
+              </Link>
 
-        {/* Row 2: Icons */}
-        <div
-          className="d-flex justify-content-around align-items-center w-100 my-2 my-md-0"
-          style={{ maxWidth: "500px" }}
-        >
-          <Link to="/dashboard" className="text-white nav-icon">
-            <FaHome size={22} />
-          </Link>
-          <Link to="/friends" className="text-white nav-icon">
-            <FaUserFriends size={22} />
-          </Link>
-          <Link to="/messages" className="text-white nav-icon">
-            <FaEnvelope size={22} />
-          </Link>
-          <Link to="/notifications" className="text-white nav-icon">
-            <FaBell size={22} />
-          </Link>
-          <button className="btn btn-sm btn-light rounded-circle">
-            <MdDarkMode size={20} />
-          </button>
-        </div>
+              {/* Mobile Search Toggle */}
+              <div className="d-flex align-items-center gap-3">
+                <button className="btn text-white p-1">
+                  <FaSearch size={20} />
+                </button>
+                <button
+                  className="btn text-white p-1"
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                >
+                  {showMobileMenu ? (
+                    <FaTimes size={22} />
+                  ) : (
+                    <FaBars size={22} />
+                  )}
+                </button>
+              </div>
+            </div>
 
-        {/* Row 3: Profile Dropdown */}
-        <div className="d-flex w-100 justify-content-end align-items-center mt-2 mt-md-0">
-          {user ? (
-            <ProfileDropdown
-              user={user}
-              onLogout={onLogout}
-              getAvatarUrl={user.profile.cover_photo}
-            />
-          ) : (
-            <div className="text-white">Not logged in</div>
-          )}
+            {/* Row 2: Search Bar (Visible when toggled) */}
+            <div
+              className={`w-100 mb-2 ${showMobileMenu ? "d-block" : "d-none"}`}
+            >
+              <div className="position-relative">
+                <input
+                  type="text"
+                  placeholder="Search IGSSAX"
+                  className="form-control rounded-pill ps-5 border-0 shadow-sm"
+                />
+                <FaSearch
+                  className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                  size={16}
+                />
+              </div>
+            </div>
+
+            {/* Row 3: Navigation Icons (Visible when menu is open) */}
+            <div
+              className={`w-100 ${
+                showMobileMenu ? "d-flex" : "d-none"
+              } justify-content-around align-items-center py-2 border-top border-white border-opacity-25`}
+            >
+              <Link
+                to="/dashboard"
+                className="text-white nav-icon-mobile text-center"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <FaHome size={20} />
+                <div className="nav-label">Home</div>
+              </Link>
+              <Link
+                to="/friends"
+                className="text-white nav-icon-mobile text-center"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <FaUserFriends size={20} />
+                <div className="nav-label">Friends</div>
+              </Link>
+              <Link
+                to="/messages"
+                className="text-white nav-icon-mobile text-center"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <FaEnvelope size={20} />
+                <div className="nav-label">Messages</div>
+              </Link>
+              <Link
+                to="/notifications"
+                className="text-white nav-icon-mobile text-center"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <FaBell size={20} />
+                <div className="nav-label">Alerts</div>
+              </Link>
+              <button className="btn text-white nav-icon-mobile text-center">
+                <MdDarkMode size={20} />
+                <div className="nav-label">Theme</div>
+              </button>
+
+              {/* Mobile Profile */}
+              {isAuthenticated && (
+                <div className="nav-icon-mobile text-center">
+                  <ProfileDropdown
+                    user={currentUser}
+                    onLogout={onLogout}
+                    mobile
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Bottom Navigation (Always visible on mobile) */}
+      <div className="d-lg-none fixed-bottom bg-custom-nav border-top border-white border-opacity-25">
+        <div className="container-fluid">
+          <div className="d-flex justify-content-around align-items-center py-2">
+            <Link
+              to="/dashboard"
+              className="text-white nav-icon-mobile text-center"
+            >
+              <FaHome size={20} />
+              <div className="nav-label">Home</div>
+            </Link>
+            <Link
+              to="/friends"
+              className="text-white nav-icon-mobile text-center"
+            >
+              <FaUserFriends size={20} />
+              <div className="nav-label">Friends</div>
+            </Link>
+            <Link
+              to="/messages"
+              className="text-white nav-icon-mobile text-center"
+            >
+              <FaEnvelope size={20} />
+              <div className="nav-label">Messages</div>
+            </Link>
+            <Link
+              to="/notifications"
+              className="text-white nav-icon-mobile text-center"
+            >
+              <FaBell size={20} />
+              <div className="nav-label">Alerts</div>
+            </Link>
+            {isAuthenticated && (
+              <div className="nav-icon-mobile text-center">
+                <ProfileDropdown
+                  user={currentUser}
+                  onLogout={onLogout}
+                  mobile
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 }
 

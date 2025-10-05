@@ -1,159 +1,154 @@
 import { useState } from "react";
-import { Form, Card, Button, Alert } from "react-bootstrap";
+import { Card, Tab, Nav, Button, Alert, Spinner } from "react-bootstrap";
 import {
-  FaSun,
-  FaMoon,
-  FaDesktop,
+  FaPalette,
   FaFont,
-  FaCompressArrowsAlt,
+  FaUniversalAccess,
+  FaEye,
   FaSave,
 } from "react-icons/fa";
+import { useTheme } from "../../../ThemeContext";
+import { settingsAPI } from "../../../api/axios";
+import ThemeSettings from "./ThemeSettings";
+import TypographySettings from "./TypographySettings";
+import AccessibilitySettings from "./AccessibilitySettings";
+import LivePreview from "./LivePreview";
+
+const themeColor = "#73c2be";
 
 function DisplaySettings() {
-  const [theme, setTheme] = useState("system");
-  const [fontSize, setFontSize] = useState(16);
-  const [density, setDensity] = useState("comfortable");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [activeTab, setActiveTab] = useState("theme");
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    setSuccessMsg("Display settings updated successfully!");
-    // TODO: Replace with real API call
-    // axios.patch("/api/settings/display", { theme, fontSize, density })
+  const theme = useTheme(); // This now has refreshSettings function
+
+  const tabs = [
+    {
+      key: "theme",
+      title: "Theme & Colors",
+      icon: <FaPalette />,
+      component: <ThemeSettings />,
+    },
+    {
+      key: "typography",
+      title: "Typography & Layout",
+      icon: <FaFont />,
+      component: <TypographySettings />,
+    },
+    {
+      key: "accessibility",
+      title: "Accessibility",
+      icon: <FaUniversalAccess />,
+      component: <AccessibilitySettings />,
+    },
+    {
+      key: "preview",
+      title: "Live Preview",
+      icon: <FaEye />,
+      component: <LivePreview />,
+    },
+  ];
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await settingsAPI.updateSettings({
+        theme: theme.theme,
+        font_size: theme.fontSize,
+        layout_density: theme.layoutDensity,
+        reduced_motion: theme.reducedMotion,
+        high_contrast: theme.highContrast,
+        color_blind_mode: theme.colorBlindMode,
+        language: theme.language,
+      });
+
+      // Refresh the theme context to ensure it's in sync with backend
+      await theme.refreshSettings();
+
+      setMessage({
+        type: "success",
+        text: "Display settings saved successfully!",
+      });
+    } catch (error) {
+      console.error("Save error:", error);
+      setMessage({
+        type: "error",
+        text: "Failed to save display settings",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <div>
-      <h4 className="mb-4">
-        <FaDesktop className="me-2 text-primary" /> Display Settings
-      </h4>
-
-      {successMsg && <Alert variant="success">{successMsg}</Alert>}
-
-      <Form onSubmit={handleSave}>
-        {/* Theme */}
-        <Card className="mb-3 shadow-sm">
-          <Card.Header className="fw-bold">
-            <FaSun className="me-2 text-warning" /> Theme
-          </Card.Header>
-          <Card.Body>
-            <Form.Check
-              type="radio"
-              name="theme"
-              id="light"
-              label={
-                <>
-                  <FaSun className="me-2 text-warning" /> Light
-                </>
-              }
-              checked={theme === "light"}
-              onChange={() => setTheme("light")}
-              className="mb-2"
-            />
-            <Form.Check
-              type="radio"
-              name="theme"
-              id="dark"
-              label={
-                <>
-                  <FaMoon className="me-2 text-dark" /> Dark
-                </>
-              }
-              checked={theme === "dark"}
-              onChange={() => setTheme("dark")}
-              className="mb-2"
-            />
-            <Form.Check
-              type="radio"
-              name="theme"
-              id="system"
-              label={
-                <>
-                  <FaDesktop className="me-2 text-primary" /> System Default
-                </>
-              }
-              checked={theme === "system"}
-              onChange={() => setTheme("system")}
-            />
-          </Card.Body>
-        </Card>
-
-        {/* Font Size */}
-        <Card className="mb-3 shadow-sm">
-          <Card.Header className="fw-bold">
-            <FaFont className="me-2 text-success" /> Font Size
-          </Card.Header>
-          <Card.Body>
-            <Form.Label>
-              Adjust font size: <strong>{fontSize}px</strong>
-            </Form.Label>
-            <Form.Range
-              min={12}
-              max={24}
-              value={fontSize}
-              onChange={(e) => setFontSize(Number(e.target.value))}
-            />
-          </Card.Body>
-        </Card>
-
-        {/* Layout Density */}
-        <Card className="mb-3 shadow-sm">
-          <Card.Header className="fw-bold">
-            <FaCompressArrowsAlt className="me-2 text-info" /> Layout Density
-          </Card.Header>
-          <Card.Body>
-            <Form.Check
-              type="radio"
-              name="density"
-              id="comfortable"
-              label="Comfortable"
-              checked={density === "comfortable"}
-              onChange={() => setDensity("comfortable")}
-              className="mb-2"
-            />
-            <Form.Check
-              type="radio"
-              name="density"
-              id="compact"
-              label="Compact"
-              checked={density === "compact"}
-              onChange={() => setDensity("compact")}
-            />
-          </Card.Body>
-        </Card>
-
-        {/* Live Preview */}
-        <Card className="mb-3 shadow-sm">
-          <Card.Header className="fw-bold">Live Preview</Card.Header>
-          <Card.Body
-            style={{
-              backgroundColor:
-                theme === "dark"
-                  ? "#1e1e1e"
-                  : theme === "light"
-                  ? "#ffffff"
-                  : "#f8f9fa",
-              color: theme === "dark" ? "#f8f9fa" : "#212529",
-              fontSize: `${fontSize}px`,
-              padding: density === "compact" ? "8px" : "16px",
-              borderRadius: "8px",
-            }}
-          >
-            <p>
-              This is a preview of your <strong>display settings</strong>.
-              Adjust theme, font size, and layout density to customize your
-              experience.
-            </p>
-          </Card.Body>
-        </Card>
-
-        {/* Save Button */}
-        <div className="text-end">
-          <Button type="submit" variant="primary">
-            <FaSave className="me-2" /> Save Changes
-          </Button>
+      <div className="d-flex align-items-center justify-content-between mb-4">
+        <div className="d-flex align-items-center">
+          <FaPalette className="me-2" style={{ color: themeColor }} />
+          <h4 style={{ color: themeColor, margin: 0 }}>Display & Appearance</h4>
         </div>
-      </Form>
+        <Button
+          onClick={handleSave}
+          style={{ backgroundColor: themeColor, borderColor: themeColor }}
+          disabled={saving}
+        >
+          {saving ? (
+            <>
+              <Spinner animation="border" size="sm" className="me-2" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <FaSave className="me-2" />
+              Save Settings
+            </>
+          )}
+        </Button>
+      </div>
+
+      {message.text && (
+        <Alert variant={message.type === "success" ? "success" : "danger"}>
+          {message.text}
+        </Alert>
+      )}
+
+      <Card className="border-0 shadow-sm">
+        <Card.Body className="p-0">
+          <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>
+            <Nav variant="tabs" className="px-3 pt-3">
+              {tabs.map((tab) => (
+                <Nav.Item key={tab.key}>
+                  <Nav.Link
+                    eventKey={tab.key}
+                    className={`d-flex align-items-center ${
+                      activeTab === tab.key ? "fw-bold" : ""
+                    }`}
+                    style={{
+                      color: activeTab === tab.key ? themeColor : "#6c757d",
+                      borderBottom:
+                        activeTab === tab.key
+                          ? `2px solid ${themeColor}`
+                          : "none",
+                    }}
+                  >
+                    <span className="me-2">{tab.icon}</span>
+                    {tab.title}
+                  </Nav.Link>
+                </Nav.Item>
+              ))}
+            </Nav>
+
+            <Tab.Content className="p-4">
+              {tabs.map((tab) => (
+                <Tab.Pane key={tab.key} eventKey={tab.key}>
+                  {tab.component}
+                </Tab.Pane>
+              ))}
+            </Tab.Content>
+          </Tab.Container>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

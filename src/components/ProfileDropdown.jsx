@@ -1,269 +1,181 @@
-// src/components/ProfileDropdown.jsx
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   FaUser,
   FaCog,
   FaBookmark,
   FaMoon,
-  FaQuestionCircle,
-  FaSignOutAlt,
-  FaShieldAlt,
-  FaGlobe,
   FaSun,
-  FaUserCircle,
+  FaSignOutAlt,
+  FaGlobe,
+  FaPen,
+  FaUserFriends,
+  FaStore,
+  FaBell,
 } from "react-icons/fa";
-import { ThemeContext } from "../ThemeContext";
+import { motion, AnimatePresence } from "framer-motion";
+import "./ProfileDropdown.css";
 
-function ProfileDropdown({ user, onLogout }) {
+export default function ProfileDropdown({
+  user,
+  onLogout,
+  toggleDarkMode,
+  darkMode,
+}) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpen(false);
       }
-    };
+    }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Function to get avatar URL with proper fallback
-  const getAvatarUrl = (avatarPath) => {
-    if (!avatarPath) {
-      return null; // Return null to use fallback icon
-    }
-
-    // If it's already a full URL, return as is
-    if (avatarPath.startsWith("http")) {
-      return avatarPath;
-    }
-
-    // If it's a relative path, construct the full URL
-    return `http://127.0.0.1:8000${avatarPath}`;
-  };
-
-  const avatarUrl = getAvatarUrl(user?.profile?.avatar);
-
-  // Handle image error - fixed syntax
-  const handleImageError = (e) => {
-    e.target.style.display = "none";
-    // Safely check and show fallback icon
-    const sibling = e.target.nextElementSibling;
-    if (sibling) {
-      sibling.style.display = "flex";
-    }
-  };
-
-  // Handle dropdown image error - fixed syntax
-  const handleDropdownImageError = (e) => {
-    e.target.style.display = "none";
-    // Safely check and show fallback icon
-    const sibling = e.target.nextElementSibling;
-    if (sibling) {
-      sibling.style.display = "flex";
-    }
-  };
-
   return (
-    <div className="dropdown" ref={dropdownRef}>
-      {/* Trigger */}
-      <button
+    <div className="position-relative" ref={dropdownRef}>
+      {/* Avatar / Trigger */}
+      <div
+        className="d-flex align-items-center cursor-pointer"
         onClick={() => setOpen(!open)}
-        className="btn d-flex align-items-center gap-2 border-0 bg-transparent text-white"
       >
-        {avatarUrl ? (
-          <>
-            <img
-              src={avatarUrl}
-              alt="profile"
-              className="rounded-circle border border-2 border-white"
-              width={40}
-              height={40}
-              style={{ objectFit: "cover" }}
-              onError={handleImageError}
-            />
-            {/* Fallback icon - hidden by default */}
-            <div
-              className="rounded-circle border border-2 border-white d-flex align-items-center justify-content-center d-none"
-              style={{
-                width: "40px",
-                height: "40px",
-                backgroundColor: "rgba(255,255,255,0.2)",
-                position: "absolute",
-              }}
-            >
-              <FaUserCircle size={24} className="text-white" />
-            </div>
-          </>
-        ) : (
-          <div
-            className="rounded-circle border border-2 border-white d-flex align-items-center justify-content-center"
-            style={{
-              width: "40px",
-              height: "40px",
-              backgroundColor: "rgba(255,255,255,0.2)",
-            }}
-          >
-            <FaUserCircle size={24} className="text-white" />
-          </div>
-        )}
-        <span className="fw-medium d-none d-md-inline">
-          {user?.first_name || "Guest"}
+        <img
+          src={user?.avatar || "https://via.placeholder.com/40"}
+          alt="avatar"
+          className="rounded-circle me-2"
+          width={40}
+          height={40}
+        />
+        <span className="text-white fw-semibold">
+          {user?.username || "User"}
         </span>
-      </button>
+      </div>
 
       {/* Dropdown */}
-      {open && (
-        <div
-          className="dropdown-menu dropdown-menu-end show mt-2 shadow rounded-3 p-2"
-          style={{ position: "absolute", right: 0, minWidth: "260px" }}
-        >
-          {/* Top: Profile quick link */}
-          <div className="d-flex align-items-center p-2 mb-2 rounded-3 bg-light">
-            {avatarUrl ? (
-              <>
-                <img
-                  src={avatarUrl}
-                  alt="profile"
-                  className="rounded-circle me-2"
-                  width={50}
-                  height={50}
-                  style={{ objectFit: "cover" }}
-                  onError={handleDropdownImageError}
-                />
-                {/* Fallback icon for dropdown */}
-                <div
-                  className="rounded-circle me-2 d-flex align-items-center justify-content-center d-none"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    backgroundColor: "#667eea",
-                    color: "white",
-                    position: "absolute",
-                  }}
-                >
-                  <FaUserCircle size={28} />
-                </div>
-              </>
-            ) : (
-              <div
-                className="rounded-circle me-2 d-flex align-items-center justify-content-center"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  backgroundColor: "#73c2be",
-                  color: "white",
-                }}
-              >
-                <FaUserCircle size={28} />
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="dropdown-menu show p-0 shadow-lg rounded-3"
+            style={{
+              position: "absolute",
+              top: "110%",
+              right: 0,
+              width: "350px",
+              zIndex: 2000,
+            }}
+          >
+            {/* User Info */}
+            <div className="border-bottom p-3 d-flex align-items-center">
+              <img
+                src={user?.avatar || "https://via.placeholder.com/50"}
+                alt="avatar"
+                className="rounded-circle me-3"
+                width={50}
+                height={50}
+              />
+              <div>
+                <h6 className="mb-0">{user?.username || "Guest User"}</h6>
+                <small className="text-muted">
+                  {user?.email || "No email"}
+                </small>
               </div>
-            )}
-            <div>
-              <Link
-                to="/profile/me"
-                className="fw-bold text-dark text-decoration-none"
-                onClick={() => setOpen(false)}
-              >
-                {user?.first_name} {user?.last_name}
-              </Link>
-              <p className="text-muted small mb-0">{user?.email}</p>
             </div>
-          </div>
 
-          <hr className="my-2" />
+            {/* Quick Actions Row */}
+            <div className="d-flex justify-content-around border-bottom py-2">
+              <Link
+                to="/create"
+                className="text-center text-decoration-none text-dark small"
+              >
+                <FaPen size={18} className="mb-1" />
+                <div>Create</div>
+              </Link>
+              <Link
+                to="/groups"
+                className="text-center text-decoration-none text-dark small"
+              >
+                <FaUserFriends size={18} className="mb-1" />
+                <div>Groups</div>
+              </Link>
+              <Link
+                to="/marketplace"
+                className="text-center text-decoration-none text-dark small"
+              >
+                <FaStore size={18} className="mb-1" />
+                <div>Market</div>
+              </Link>
+              <Link
+                to="/notifications"
+                className="text-center text-decoration-none text-dark small position-relative"
+              >
+                <FaBell size={18} className="mb-1" />
+                <div>Alerts</div>
+                <span className="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                  5
+                </span>
+              </Link>
+            </div>
 
-          {/* Quick links */}
-          <ul className="list-unstyled mb-2">
-            <li>
-              <Link
-                className="dropdown-item d-flex align-items-center gap-2"
-                to="/profile/me"
-                onClick={() => setOpen(false)}
-              >
-                <FaUser /> My Profile
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="dropdown-item d-flex align-items-center gap-2"
-                to="/saved"
-                onClick={() => setOpen(false)}
-              >
-                <FaBookmark /> Saved
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="dropdown-item d-flex align-items-center gap-2"
-                to="/settings"
-                onClick={() => setOpen(false)}
-              >
-                <FaCog /> Settings
-              </Link>
-            </li>
-          </ul>
+            {/* Multi-column Sections (Bootstrap responsive grid) */}
+            <div className="container-fluid py-3">
+              <div className="row">
+                {/* Column 1 */}
+                <div className="col-12 col-md-6 mb-3 mb-md-0">
+                  <h6 className="text-muted small">Account</h6>
+                  <Link className="dropdown-item px-0" to="/profile/me">
+                    <FaUser className="me-2" /> Profile
+                  </Link>
+                  <Link className="dropdown-item px-0" to="/settings">
+                    <FaCog className="me-2" /> Settings
+                  </Link>
+                  <Link
+                    className="dropdown-item px-0 d-flex justify-content-between align-items-center"
+                    to="/saved"
+                  >
+                    <span>
+                      <FaBookmark className="me-2" /> Saved
+                    </span>
+                    <span className="badge bg-primary rounded-pill">3</span>
+                  </Link>
+                </div>
 
-          <hr className="my-2" />
-
-          {/* Tools */}
-          <ul className="list-unstyled mb-2">
-            <li>
-              <button
-                className="dropdown-item d-flex align-items-center gap-2"
-                onClick={toggleDarkMode}
-              >
-                {darkMode ? <FaSun /> : <FaMoon />}
-                {darkMode ? "Light Mode" : "Dark Mode"}
-              </button>
-            </li>
-            <li>
-              <Link
-                className="dropdown-item d-flex align-items-center gap-2"
-                to="/privacy"
-                onClick={() => setOpen(false)}
-              >
-                <FaShieldAlt /> Privacy
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="dropdown-item d-flex align-items-center gap-2"
-                to="/help"
-                onClick={() => setOpen(false)}
-              >
-                <FaQuestionCircle /> Help & Support
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="dropdown-item d-flex align-items-center gap-2"
-                to="/language"
-                onClick={() => setOpen(false)}
-              >
-                <FaGlobe /> Language
-              </Link>
-            </li>
-          </ul>
-
-          <hr className="my-2" />
-
-          {/* Logout */}
-          <div className="text-center">
-            <button
-              className="btn btn-sm btn-danger w-100 d-flex align-items-center justify-content-center gap-2"
-              onClick={onLogout}
-            >
-              <FaSignOutAlt /> Logout
-            </button>
-          </div>
-        </div>
-      )}
+                {/* Column 2 */}
+                <div className="col-12 col-md-6">
+                  <h6 className="text-muted small">Tools</h6>
+                  <button
+                    className="dropdown-item px-0"
+                    onClick={toggleDarkMode}
+                  >
+                    {darkMode ? (
+                      <FaSun className="me-2" />
+                    ) : (
+                      <FaMoon className="me-2" />
+                    )}
+                    {darkMode ? "Light Mode" : "Dark Mode"}
+                  </button>
+                  <Link className="dropdown-item px-0" to="/language">
+                    <FaGlobe className="me-2" /> Language
+                  </Link>
+                  <button
+                    className="dropdown-item px-0 text-danger"
+                    onClick={onLogout}
+                  >
+                    <FaSignOutAlt className="me-2" /> Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-
-export default ProfileDropdown;

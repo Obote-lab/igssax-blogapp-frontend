@@ -1,29 +1,87 @@
-.settings-sidebar {
-  background: #fff;
+.settings-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.settings-sidebar .list-group-item {
+.settings-content {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.sidebar-sticky {
+  position: sticky;
+  top: 2rem;
+}
+
+/* Smooth transitions */
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Custom scrollbar */
+.settings-content ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-content ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.settings-content ::-webkit-scrollbar-thumb {
+  background: #73c2be;
+  border-radius: 10px;
+}
+
+.settings-content ::-webkit-scrollbar-thumb:hover {
+  background: #5ba8a4;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 1rem 0.5rem !important;
+  }
+  
+  .sidebar-sticky {
+    position: relative;
+    top: 0;
+  }
+}
+
+/* Animation for page transitions */
+.settings-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.settings-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(45deg, #73c2be, #5ba8a4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom button styles */
+.btn-theme {
+  background: linear-gradient(45deg, #73c2be, #5ba8a4);
   border: none;
-  border-radius: 8px;
-  color: #444;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  color: white;
+  transition: all 0.3s ease;
 }
 
-.settings-sidebar .list-group-item:hover {
-  background-color: #f8f9fa;
-  color: #0d6efd;
-  transform: translateX(3px);
-}
-
-.settings-sidebar .list-group-item.active {
-  background-color: #e7f1ff;
-  color: #0d6efd;
-  font-weight: 600;
-  border-left: 4px solid #0d6efd;
-}
-
-.settings-sidebar .sidebar-icon {
-  font-size: 1.1rem;
-  color: inherit;
+.btn-theme:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(115, 194, 190, 0.4);
 }

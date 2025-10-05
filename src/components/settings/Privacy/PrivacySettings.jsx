@@ -1,118 +1,100 @@
 import { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Card, Tab, Nav, Alert } from "react-bootstrap";
 import {
   FaShieldAlt,
-  FaSave,
-  FaUserSecret,
+  FaEye,
+  FaUserSlash,
+  FaGlobe,
   FaSearch,
   FaUserFriends,
 } from "react-icons/fa";
+import ActivityStatusToggle from "./ActivityStatusToggle";
+import BlockUsers from "./BlockedUsers";
+import PostVisibilitySettings from "./PostVisibilitySettings";
+import SearchDiscoverySettings from "./SearchDiscoverySettings";
+
+const themeColor = "#73c2be";
 
 function PrivacySettings() {
-  const [settings, setSettings] = useState({
-    profileVisible: true,
-    allowFriendRequests: true,
-    showActivityStatus: false,
-    allowSearchEngines: false,
-  });
+  const [activeTab, setActiveTab] = useState("profile");
+  const [message, setMessage] = useState({ type: "", text: "" });
 
-  const [successMsg, setSuccessMsg] = useState("");
-
-  const handleToggle = (e) => {
-    const { name, checked } = e.target;
-    setSettings({ ...settings, [name]: checked });
-  };
-
-  const handleSave = (e) => {
-    e.preventDefault();
-    setSuccessMsg("Privacy settings saved successfully!");
-    // Replace with API call, e.g.:
-    // axios.patch("/api/settings/privacy", settings)
-  };
+  const tabs = [
+    {
+      key: "profile",
+      title: "Profile & Posts",
+      icon: <FaGlobe />,
+      component: <PostVisibilitySettings />,
+    },
+    {
+      key: "activity",
+      title: "Activity Status",
+      icon: <FaEye />,
+      component: <ActivityStatusToggle />,
+    },
+    {
+      key: "blocking",
+      title: "Blocked Users",
+      icon: <FaUserSlash />,
+      component: <BlockUsers />,
+    },
+    {
+      key: "discovery",
+      title: "Search & Discovery",
+      icon: <FaSearch />,
+      component: <SearchDiscoverySettings />,
+    },
+  ];
 
   return (
     <div>
-      <h4 className="mb-4">
-        <FaShieldAlt className="me-2 text-primary" /> Privacy Settings
-      </h4>
+      <div className="d-flex align-items-center mb-4">
+        <FaShieldAlt className="me-2" style={{ color: themeColor }} />
+        <h4 style={{ color: themeColor, margin: 0 }}>Privacy & Security</h4>
+      </div>
 
-      {successMsg && <Alert variant="success">{successMsg}</Alert>}
+      {message.text && (
+        <Alert variant={message.type === "success" ? "success" : "danger"}>
+          {message.text}
+        </Alert>
+      )}
 
-      <Form
-        onSubmit={handleSave}
-        className="p-3 border rounded bg-light shadow-sm"
-      >
-        {/* Profile Visibility */}
-        <Form.Check
-          type="switch"
-          id="profileVisible"
-          label={
-            <span>
-              <FaUserSecret className="me-2 text-secondary" />
-              Make my profile visible to others
-            </span>
-          }
-          name="profileVisible"
-          checked={settings.profileVisible}
-          onChange={handleToggle}
-          className="mb-3"
-        />
+      <Card className="border-0 shadow-sm">
+        <Card.Body className="p-0">
+          <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>
+            <Nav variant="tabs" className="px-3 pt-3">
+              {tabs.map((tab) => (
+                <Nav.Item key={tab.key}>
+                  <Nav.Link
+                    eventKey={tab.key}
+                    className={`d-flex align-items-center ${
+                      activeTab === tab.key ? "fw-bold" : ""
+                    }`}
+                    style={{
+                      color: activeTab === tab.key ? themeColor : "#6c757d",
+                      borderBottom:
+                        activeTab === tab.key
+                          ? `2px solid ${themeColor}`
+                          : "none",
+                    }}
+                  >
+                    <span className="me-2">{tab.icon}</span>
+                    {tab.title}
+                  </Nav.Link>
+                </Nav.Item>
+              ))}
+            </Nav>
 
-        {/* Friend Requests */}
-        <Form.Check
-          type="switch"
-          id="allowFriendRequests"
-          label={
-            <span>
-              <FaUserFriends className="me-2 text-success" />
-              Allow friend requests from anyone
-            </span>
-          }
-          name="allowFriendRequests"
-          checked={settings.allowFriendRequests}
-          onChange={handleToggle}
-          className="mb-3"
-        />
-
-        {/* Activity Status */}
-        <Form.Check
-          type="switch"
-          id="showActivityStatus"
-          label={
-            <span>
-              <FaUserSecret className="me-2 text-info" />
-              Show my activity status (online/offline)
-            </span>
-          }
-          name="showActivityStatus"
-          checked={settings.showActivityStatus}
-          onChange={handleToggle}
-          className="mb-3"
-        />
-
-        {/* Search Engine Discoverability */}
-        <Form.Check
-          type="switch"
-          id="allowSearchEngines"
-          label={
-            <span>
-              <FaSearch className="me-2 text-warning" />
-              Allow search engines to index my profile
-            </span>
-          }
-          name="allowSearchEngines"
-          checked={settings.allowSearchEngines}
-          onChange={handleToggle}
-          className="mb-4"
-        />
-
-        {/* Save Button */}
-        <div className="text-end">
-          <Button type="submit" variant="primary">
-            <FaSave className="me-2" /> Save Changes
-          </Button>
-        </div>
-      </Form>
+            <Tab.Content className="p-4">
+              {tabs.map((tab) => (
+                <Tab.Pane key={tab.key} eventKey={tab.key}>
+                  {tab.component}
+                </Tab.Pane>
+              ))}
+            </Tab.Content>
+          </Tab.Container>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

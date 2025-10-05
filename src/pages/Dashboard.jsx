@@ -37,11 +37,11 @@ function Dashboard() {
       <style>
               {`
           body {
-            background-color: #f0f2f5; /* Light grey like Facebook */
+            background-color: #f0f2f5; 
           }
 
           .sidebar-scroll, .feed-scroll {
-            height: calc(100vh - 60px); /* adjust for navbar height */
+            height: calc(100vh - 60px); 
             overflow-y: auto;
             -ms-overflow-style: none;
             scrollbar-width: none;
