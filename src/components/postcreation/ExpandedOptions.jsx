@@ -34,11 +34,11 @@ function ExpandedOptions({
   };
 
   return (
-    <div className="options-expanded mb-3 p-3 border rounded bg-light position-relative">
+    <div className="options-expanded mb-3 p-3 border rounded bg-none position-relative">
       {/* Close Button */}
       <button
         type="button"
-        className="btn btn-sm btn-light position-absolute top-0 end-0 m-2"
+        className="btn btn-sm position-absolute top-0 end-0 m-2"
         onClick={onClose}
       >
         <FaTimes />

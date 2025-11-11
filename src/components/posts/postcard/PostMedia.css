@@ -1,0 +1,96 @@
+/* ========== GRID LAYOUT FOR MULTIPLE MEDIA ========== */
+.post-media-grid {
+  display: grid;
+  gap: 2px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #f0f2f5;
+}
+
+/* Dynamic column layouts */
+.post-media-grid.media-count-1 {
+  grid-template-columns: 1fr;
+  max-height: 500px;
+}
+
+.post-media-grid.media-count-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.post-media-grid.media-count-3 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.post-media-grid.media-count-3 .media-wrapper:first-child {
+  grid-column: 1 / span 2;
+}
+
+.post-media-grid.media-count-4 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.post-media-grid.media-count-5 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.post-media-grid.media-count-5 .media-wrapper:first-child {
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+}
+
+/* ========== MEDIA WRAPPER ========== */
+.media-wrapper {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.media-wrapper:hover {
+  opacity: 0.95;
+}
+
+/* ========== VIDEO OVERLAY ========== */
+.video-overlay {
+  background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.video-container:hover .video-overlay {
+  opacity: 1;
+}
+
+.video-play-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .post-media-grid {
+    border-radius: 8px;
+  }
+  
+  .video-overlay {
+    opacity: 1;
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) {
+  .video-overlay {
+    opacity: 1;
+  }
+}

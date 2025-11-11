@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaGlobe, FaUserFriends, FaLock } from "react-icons/fa";
-
-const themeColor = "#73c2be";
+import { useTheme } from "../../ThemeContext";
 
 const privacyOptions = [
   {
@@ -29,12 +28,24 @@ const privacyOptions = [
 
 function PostHeader({ user, privacy, setPrivacy, loading }) {
   const [showPrivacyDropdown, setShowPrivacyDropdown] = useState(false);
+  const { theme } = useTheme();
 
   const getPrivacyIcon = (value) => {
     const option = privacyOptions.find((opt) => opt.value === value);
     const IconComponent = option?.icon || FaGlobe;
     return <IconComponent size={12} />;
   };
+
+  // Get theme color dynamically
+  const getThemeColor = () => {
+    const root = document.documentElement;
+    return (
+      getComputedStyle(root).getPropertyValue("--accent-color").trim() ||
+      "#73c2be"
+    );
+  };
+
+  const themeColor = getThemeColor();
 
   return (
     <div className="d-flex align-items-center mb-3">
@@ -47,16 +58,21 @@ function PostHeader({ user, privacy, setPrivacy, loading }) {
         style={{ objectFit: "cover" }}
       />
       <div className="flex-grow-1">
-        <h6 className="mb-0 fw-bold text-dark">
+        <h6 className="mb-0 fw-bold" style={{ color: "var(--text-primary)" }}>
           {user?.first_name} {user?.last_name}
         </h6>
 
         {/* Privacy Selector */}
         <div className="position-relative">
           <button
-            className="btn btn-sm btn-light rounded-pill mt-1 d-flex align-items-center gap-2"
+            className="btn btn-sm rounded-pill mt-1 d-flex align-items-center gap-2"
             onClick={() => setShowPrivacyDropdown(!showPrivacyDropdown)}
             disabled={loading}
+            style={{
+              backgroundColor: "var(--bg-secondary)",
+              border: "1px solid var(--border-color)",
+              color: "var(--text-primary)",
+            }}
           >
             {getPrivacyIcon(privacy)}
             <span className="small">
@@ -66,7 +82,13 @@ function PostHeader({ user, privacy, setPrivacy, loading }) {
 
           {/* Privacy Dropdown */}
           {showPrivacyDropdown && (
-            <div className="privacy-dropdown show shadow border-0">
+            <div
+              className="privacy-dropdown show shadow border-0"
+              style={{
+                backgroundColor: "var(--bg-primary)",
+                border: "1px solid var(--border-color)",
+              }}
+            >
               {privacyOptions.map((option) => {
                 const IconComponent = option.icon;
                 return (
@@ -77,13 +99,24 @@ function PostHeader({ user, privacy, setPrivacy, loading }) {
                       setPrivacy(option.value);
                       setShowPrivacyDropdown(false);
                     }}
+                    style={{
+                      color: "var(--text-primary)",
+                    }}
                   >
                     <div className="privacy-icon">
                       <IconComponent style={{ color: option.color }} />
                     </div>
                     <div className="privacy-text">
-                      <div className="privacy-label">{option.label}</div>
-                      <div className="privacy-description">
+                      <div
+                        className="privacy-label"
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {option.label}
+                      </div>
+                      <div
+                        className="privacy-description"
+                        style={{ color: "var(--text-secondary)" }}
+                      >
                         {option.description}
                       </div>
                     </div>

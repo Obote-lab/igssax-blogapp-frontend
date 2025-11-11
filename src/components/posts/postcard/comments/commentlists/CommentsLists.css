@@ -1,0 +1,351 @@
+
+.comments-card {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Comment count header */
+.comment-count-header {
+  background: transparent;
+  border-bottom: 1px solid #e4e6ea;
+}
+
+/* Comment items */
+.comment-item {
+  transition: background-color 0.2s ease;
+  background: transparent;
+}
+
+.comment-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Dark mode adjustments */
+.bg-dark .comment-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Button overrides */
+.btn-link {
+  text-decoration: none;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.btn-link:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* Dropdown overrides */
+.dropdown-toggle::after {
+  display: none;
+}
+
+/* Scrollbar styling */
+.comments-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.comments-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 3px;
+}
+
+.bg-dark .comments-list::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .comments-list {
+    max-height: 300px;
+  }
+  
+  .comment-content {
+    margin-left: 0 !important;
+  }
+  
+  .comment-item {
+    padding: 12px 16px;
+  }
+}
+
+/* Author badge styling */
+.badge {
+  font-size: 8px;
+  padding: 2px 4px;
+}
+
+/* Text sizing adjustments */
+.small {
+  font-size: 13px;
+}
+
+.text-muted {
+  opacity: 0.7;
+}
+
+/* Avatar alignment fixes */
+.comment-item .d-flex.align-items-start {
+  align-items: flex-start !important;
+}
+
+/* Ensure proper spacing with avatars */
+.comment-avatar-container {
+  flex-shrink: 0;
+}
+
+
+.replies-container {
+  border-left: 2px solid #e4e6ea !important;
+}
+
+.bg-dark .replies-container {
+  border-left-color: #444 !important;
+}
+
+.reply-item {
+  border-color: #f0f0f0 !important;
+}
+
+.bg-dark .reply-item {
+  border-color: #333 !important;
+}
+
+.comments-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Smooth transitions */
+.replies-container {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+
+.reply-item {
+  border-color: #f0f0f0 !important;
+}
+
+.replies-container .replies-container {
+  border-left-width: 1px !important;
+  border-left-color: #d0d0d0 !important;
+}
+
+.bg-dark .replies-container .replies-container {
+  border-left-color: #555 !important;
+}
+
+/* Progressive indentation for deeper levels */
+.replies-container .replies-container {
+  margin-left: 0.5rem !important;
+  padding-left: 0.75rem !important;
+}
+
+/* Smooth transitions for all levels */
+.replies-container {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+
+/* Add to CommentsLists.css */
+.reply-input-container {
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure proper spacing for reply inputs */
+.comment-content .reply-input-container {
+  margin-left: 0;
+  border-radius: 8px;
+}
+
+/* Dark mode adjustments for reply input */
+.bg-dark .reply-input-container {
+  background-color: #2d3748 !important;
+  border-color: #4a5568 !important;
+}
+
+
+
+
+/* Attachments Styles */
+.comment-attachments {
+  margin: 0.5rem 0;
+}
+
+.attachments-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.attachments-grid.single {
+  grid-template-columns: 1fr;
+}
+
+.attachments-grid.multiple {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.attachment-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-attachment,
+.gif-attachment {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.image-attachment:hover,
+.gif-attachment:hover {
+  transform: scale(1.02);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.gif-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.video-attachment video {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+
+.file-attachment {
+  border: 1px solid #dee2e6;
+  max-width: 250px;
+}
+
+.bg-dark .file-attachment {
+  border-color: #495057;
+  background: #343a40 !important;
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.modal-content {
+  background: transparent !important;
+  border: none !important;
+}
+
+.btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .attachments-grid.multiple {
+    grid-template-columns: 1fr;
+  }
+  
+  .file-attachment {
+    max-width: 100%;
+  }
+}
+
+/* Dark theme adjustments */
+.bg-dark .image-attachment img,
+.bg-dark .gif-attachment img {
+  border: 1px solid #495057;
+}
+
+.bg-dark .video-attachment video {
+  background: #495057;
+  border: 1px solid #6c757d;
+}
+
+/* Loading states */
+.attachment-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.fallback-text {
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed #dee2e6;
+  border-radius: 0.375rem;
+}
+
+.extra-small {
+  font-size: 0.75rem;
+}
+
+
+.comment-card {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comment-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

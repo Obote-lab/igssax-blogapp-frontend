@@ -1,0 +1,249 @@
+/* CommentInput.css - Enhanced Facebook Style */
+.comment-input-container {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+/* Input Wrapper */
+.input-wrapper {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid;
+  overflow: hidden;
+}
+
+.input-wrapper:focus-within {
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Textarea Styling */
+.comment-textarea {
+  resize: none;
+  overflow: hidden;
+  min-height: 40px;
+  max-height: 120px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.comment-textarea::placeholder {
+  color: #8a8d91;
+  font-weight: 400;
+}
+
+/* Input Actions */
+.input-actions {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.input-wrapper:focus-within .input-actions {
+  opacity: 1;
+}
+
+/* Hover Effects */
+.hover-bg-dark:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.hover-bg-light:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.hover-bg-gray-800:hover {
+  background-color: #2d3748 !important;
+}
+
+/* Attachment Menu */
+.attachment-menu {
+  min-width: 180px;
+  z-index: 1000;
+  animation: slideUp 0.2s ease-out;
+  border: 1px solid;
+}
+
+.attachment-menu .btn {
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.attachment-menu .btn:hover {
+  transform: translateX(4px);
+}
+
+/* Emoji Picker */
+.emoji-picker-container {
+  animation: fadeInUp 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Image Previews */
+.image-previews {
+  animation: slideIn 0.3s ease;
+}
+
+.image-previews img {
+  transition: transform 0.2s ease;
+}
+
+.image-previews img:hover {
+  transform: scale(1.05);
+}
+
+/* Send Button */
+.send-btn {
+  font-weight: 600;
+  transition: all 0.3s ease !important;
+  padding: 6px 16px !important;
+}
+
+.send-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+}
+
+/* Reply Indicator */
+.replying-indicator {
+  animation: slideDown 0.3s ease;
+  border-left: 3px solid #1877f2;
+  /* border-left: 3px solid #73c2be; */
+
+}
+
+/* Character Counter */
+.char-counter {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark Mode Specific */
+.bg-dark .input-wrapper {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.bg-dark .comment-textarea::placeholder {
+  color: #8a8d91;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .comment-input-container {
+    padding: 16px !important;
+  }
+  
+  .attachment-menu {
+    position: fixed !important;
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+    width: auto !important;
+  }
+  
+  .emoji-picker-container {
+    position: fixed !important;
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+    width: auto !important;
+  }
+}
+
+/* Smooth Transitions */
+.transition-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom Scrollbar for Textarea */
+.comment-textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comment-textarea::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.bg-dark .comment-textarea::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+
+/* Add to your CommentInput.css */
+
+/* Avatar styling */
+.comment-input-avatar {
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.comment-input-avatar:hover {
+  border-color: #1877f2;
+}
+
+/* Fallback avatar styles */
+.bg-primary {
+  background: linear-gradient(135deg, #1877f2, #0d6efd) !important;
+}
+
+/* Ensure proper avatar sizing */
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+/* Avatar container */
+.avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

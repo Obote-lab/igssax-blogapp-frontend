@@ -1,0 +1,296 @@
+/* MediaLightbox.css */
+.media-lightbox {
+  animation: lightboxFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+}
+
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(20px);
+  }
+}
+
+.lightbox-content {
+  max-width: 95vw;
+  max-height: 95vh;
+  animation: contentScaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes contentScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Image Styles */
+.lightbox-image-container {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.image-caption {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  backdrop-filter: blur(10px);
+  font-size: 0.95rem;
+}
+
+/* Video Styles */
+.lightbox-video-container {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox-video {
+  width: 100%;
+  height: 100%;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.lightbox-video-controls-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4) 0%,
+    transparent 20%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.lightbox-video-container:hover .lightbox-video-controls-overlay,
+.lightbox-video-controls-overlay:hover {
+  opacity: 1;
+}
+
+/* Enhanced Controls */
+.lightbox-controls-bottom {
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.play-button-huge {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.play-button-huge:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  cursor: pointer;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar-background {
+  height: 4px;
+  transition: height 0.2s ease;
+}
+
+.progress-bar-container:hover .progress-bar-background {
+  height: 6px;
+}
+
+.progress-bar-fill {
+  transition: width 0.1s linear;
+}
+
+.progress-bar-thumb {
+  opacity: 0;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.progress-bar-container:hover .progress-bar-thumb {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Volume Slider */
+.volume-slider {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.volume-slider:hover {
+  height: 6px;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Navigation Arrows */
+.lightbox-nav {
+  width: 60px;
+  height: 60px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-nav:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Settings Menu */
+.settings-menu {
+  min-width: 200px;
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  animation: settingsSlideIn 0.2s ease;
+}
+
+@keyframes settingsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-menu .btn {
+  transition: all 0.2s ease;
+}
+
+.settings-menu .btn:hover {
+  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Counter */
+.lightbox-counter {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Shortcuts Help */
+.shortcuts-help {
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Fullscreen Styles */
+:fullscreen .lightbox-content {
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+:fullscreen .lightbox-video {
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lightbox-nav {
+    width: 50px;
+    height: 50px;
+    margin: 2rem !important;
+  }
+  
+  .lightbox-video-controls-overlay {
+    padding: 2rem !important;
+  }
+  
+  .lightbox-controls-bottom {
+    padding: 1.5rem !important;
+  }
+  
+  .volume-slider {
+    width: 60px !important;
+  }
+  
+  .shortcuts-help {
+    display: none;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .lightbox-video-controls-overlay {
+    opacity: 1;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.6) 0%,
+      transparent 30%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
+  }
+  
+  .progress-bar-thumb {
+    opacity: 1;
+  }
+}

@@ -169,7 +169,7 @@ export const ThemeProvider = ({ children }) => {
     language,
     setLanguage,
     loading,
-    refreshSettings, // Add this function
+    refreshSettings, 
   };
 
   if (loading) {

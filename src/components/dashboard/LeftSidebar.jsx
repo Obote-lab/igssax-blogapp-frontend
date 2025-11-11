@@ -133,7 +133,7 @@ function LeftSidebar() {
       path: "/create-post",
       color: themeColor,
     },
-    { name: "Live Stream", icon: "🔴", path: "/live", color: "#ff4757" },
+    { name: "Live Stream",  icon: "🔴", path: "/live", color: "#ff4757",onClick: () => navigate('/live')},
     { name: "Story", icon: "📖", path: "/story", color: "#ffa502" },
     { name: "Event", icon: "🎉", path: "/create-event", color: "#2ed573" },
     { name: "Poll", icon: "📊", path: "/create-poll", color: "#3742fa" },

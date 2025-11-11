@@ -13,20 +13,22 @@ import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import PostsPage from "./pages/PostsPage";
 import PostDetailPage from "./pages/PostDetailPage";
-import StoriesPage from "./pages/StoriesPage";
-import TagsPage from "./pages/TagsPage";
-import ChatPage from "./pages/ChatPage";
 import FriendsPage from "./pages/FriendsPage";
 import NotFound from "./pages/NotFound";
 import SettingsPage from "./components/settings/SettingsPage";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./ThemeContext";
-
+import CreatePost from "./components/dashboard/CreatePost";
 import AccountSettings from "./components/settings/Account/AccountSettings";
 import PrivacySettings from "./components/settings/Privacy/PrivacySettings";
 import NotificationSettings from "./components/settings/Notifications/NotificationSettings";
 import DisplaySettings from "./components/settings/Display/DisplaySettings";
 import SecuritySettings from "./components/settings/Security/SecuritySettings";
+import StreamContainer from "./components/livestream/StreamContainer";
+import StreamDiscovery from "./components/livestream/StreamDiscovery";
+import CreateStream from "./components/livestream/CreateStream";
+
+
 
 function Layout() {
   const location = useLocation();
@@ -56,7 +58,6 @@ function Layout() {
           path="/profile/:userId"
           element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
         />
-
         {/* Posts & Comments */}
         <Route
           path="/posts"
@@ -69,29 +70,28 @@ function Layout() {
           }
         />
         {/* Stories */}
-        <Route
+        {/* <Route
           path="/stories"
           element={isAuthenticated ? <StoriesPage /> : <Navigate to="/login" />}
-        />
+        /> */}
         {/* Tags */}
-        <Route
+        {/* <Route
           path="/tags"
           element={isAuthenticated ? <TagsPage /> : <Navigate to="/login" />}
-        />
+        /> */}
         {/* Friends */}
         <Route
           path="/friends"
           element={isAuthenticated ? <FriendsPage /> : <Navigate to="/login" />}
         />
         {/* Chat / Conversations */}
-        <Route
+        {/* <Route
           path="/chat"
           element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" />}
-        />
+        /> */}
         {/* Password reset */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
-
         <Route
           path="/settings/*"
           element={
@@ -109,6 +109,21 @@ function Layout() {
           <Route path="security" element={<SecuritySettings />} />
         </Route>
 
+        {/* New Livestream Routes */}
+        <Route path="/live" element={<StreamDiscovery />} />
+        <Route path="/live/create" element={<CreateStream />} />
+        <Route path="/live/:streamId" element={<StreamContainer />} />
+        <Route path="/live/:streamId/watch" element={<StreamContainer />} />
+
+
+
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route
+          path="/create-post"
+          element={isAuthenticated ? <CreatePost /> : <Navigate to="/login" />}
+        />
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>

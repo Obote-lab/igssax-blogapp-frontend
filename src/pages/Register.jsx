@@ -4,11 +4,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Lottie from "lottie-react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // 👈 react-icons
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
 import loadingAnimation from "../assets/loading1.json";
 import api from "../api/axios";
 
-// ✅ Validation schema with zod
+// Validation schema with zod
 const registerSchema = z
   .object({
     first_name: z.string().min(2, "First name is required"),

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // 👈 React Icons
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
 import api from "../api/axios";
 
 const schema = z
@@ -34,10 +34,10 @@ function ResetPassword() {
       await api.post(`/auth/password/reset/confirm/${uid}/${token}/`, {
         password: data.password,
       });
-      alert("✅ Password reset successful. You can now login.");
+      alert("Password reset successful. You can now login.");
       navigate("/login");
     } catch (err) {
-      alert("❌ Error resetting password. The link may have expired.");
+      alert("Error resetting password. The link may have expired.");
     }
   };
 

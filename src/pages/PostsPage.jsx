@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { postsAPI } from "../api/axios";
-import PostCard from "../components/posts/PostCard";
+import PostCard from "../components/posts/postcard/PostCard";
 
 function PostsPage() {
   const [posts, setPosts] = useState([]);

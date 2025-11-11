@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { postsAPI } from "../api/axios";
-import PostCard from "../components/posts/PostCard";
-import Comments from "../components/posts/Comments";
+import PostCard from "../components/posts/postcard/PostCard";
+import Comments from "../components/posts/postcard/comments/Comments";
 
 function PostDetailPage() {
   const { postId } = useParams();

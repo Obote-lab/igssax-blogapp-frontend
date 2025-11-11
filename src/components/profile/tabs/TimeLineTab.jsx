@@ -1,5 +1,5 @@
 // import PostCard from  "../../dashboard/PostCard"
-import PostCard from "../../posts/PostCard";
+import PostCard from "../../posts/postcard/PostCard";
 function TimelineTab({ posts }) {
   if (!posts || posts.length === 0) {
     return <p className="text-center text-muted">No posts yet.</p>;

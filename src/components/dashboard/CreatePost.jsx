@@ -19,7 +19,6 @@ function CreatePost({ onPostCreated }) {
   const [tags, setTags] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
 
-  const fileInputRef = useRef(null);
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
@@ -30,21 +29,19 @@ function CreatePost({ onPostCreated }) {
     try {
       const formData = new FormData();
 
-      if (post.trim()) {
-        formData.append("content", post);
-      }
-
+      if (post.trim()) formData.append("content", post);
       formData.append("privacy", privacy);
 
-      mediaFiles.forEach((file) => {
-        formData.append(`media_files`, file);
-      });
+      mediaFiles.forEach((file) => formData.append("media_files", file));
 
       if (tags.length > 0) {
         formData.append("tag_names", JSON.stringify(tags));
       }
 
-      await postsAPI.createPost(formData);
+      const res = await postsAPI.createPost(formData);
+
+      // ✅ Expecting the backend to return the created post
+      const newPost = res.data;
 
       // Reset form
       setPost("");
@@ -52,8 +49,9 @@ function CreatePost({ onPostCreated }) {
       setTags([]);
       setShowOptions(false);
 
-      if (onPostCreated) {
-        onPostCreated();
+      // Notify parent (Feed)
+      if (onPostCreated && newPost) {
+        onPostCreated(newPost);
       }
     } catch (error) {
       console.error("Error creating post:", error);
@@ -71,7 +69,6 @@ function CreatePost({ onPostCreated }) {
     const validFiles = files.filter(
       (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
     );
-
     setMediaFiles((prev) => [...prev, ...validFiles]);
     event.target.value = "";
   };
@@ -81,8 +78,9 @@ function CreatePost({ onPostCreated }) {
   };
 
   const addTag = (tagText) => {
-    if (tagText.trim() && !tags.includes(tagText.trim().toLowerCase())) {
-      setTags((prev) => [...prev, tagText.trim().toLowerCase()]);
+    const trimmed = tagText.trim().toLowerCase();
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags((prev) => [...prev, trimmed]);
     }
   };
 
@@ -93,7 +91,7 @@ function CreatePost({ onPostCreated }) {
   return (
     <div className="card create-post-card border-0 shadow-sm">
       <div className="card-body p-4">
-        {/* Header with User Info & Privacy */}
+        {/* Header */}
         <PostHeader
           user={currentUser}
           privacy={privacy}
@@ -101,7 +99,7 @@ function CreatePost({ onPostCreated }) {
           loading={loading}
         />
 
-        {/* Text Input */}
+        {/* Input */}
         <PostInput
           user={currentUser}
           post={post}
@@ -115,7 +113,7 @@ function CreatePost({ onPostCreated }) {
         {/* Tags */}
         <TagsInput tags={tags} onRemoveTag={removeTag} />
 
-        {/* Quick Action Buttons */}
+        {/* Quick Actions */}
         <QuickActions
           onShowOptions={() => setShowOptions(true)}
           onImageUpload={() => imageInputRef.current?.click()}
@@ -136,7 +134,7 @@ function CreatePost({ onPostCreated }) {
           />
         )}
 
-        {/* Submit Button */}
+        {/* Submit */}
         <SubmitButton
           post={post}
           mediaFiles={mediaFiles}
@@ -145,16 +143,7 @@ function CreatePost({ onPostCreated }) {
         />
       </div>
 
-      {/* Hidden file inputs */}
-      <input
-        type="file"
-        multiple
-        accept="image/*,video/*"
-        onChange={handleMediaUpload}
-        ref={fileInputRef}
-        className="d-none"
-        disabled={loading}
-      />
+      {/* Hidden File Inputs */}
       <input
         type="file"
         multiple

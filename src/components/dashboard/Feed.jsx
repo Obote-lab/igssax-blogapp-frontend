@@ -2,57 +2,43 @@ import { useEffect, useState } from "react";
 import { postsAPI } from "../../api/axios";
 import CreatePost from "./CreatePost";
 import Stories from "./Stories";
-import PostCard from "../posts/PostCard";
+import PostCard from "../posts/postcard/PostCard";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-const fetchPosts = async () => {
-  try {
-    setLoading(true);
-    const res = await postsAPI.getPosts();
-    // console.log("Fetched posts:", res.data); // 🔍
-    setPosts(res.data);
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-  // useEffect(() => {
-  //   fetchPosts();
-  // }, []);
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const res = await postsAPI.getPosts();
+      const fetchedPosts = res.data.results || res.data;
+      setPosts(fetchedPosts);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        const res = await postsAPI.getPosts();
-        // console.log("Fetched posts:", res.data);
-        setPosts(res.data.results || res.data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPosts();
   }, []);
 
+  // Called when CreatePost successfully creates a post
+  const handlePostCreated = (newPost) => {
+    setPosts((prev) => [newPost, ...prev]);
+  };
 
   return (
     <div>
-      {/* Post creation */}
-      <CreatePost onPostCreated={fetchPosts} />
+      {/* Create Post Section */}
+      <CreatePost onPostCreated={handlePostCreated} />
 
-      {/* Stories */}
+      {/* Stories Section */}
       <Stories />
 
-      {/* Posts */}
+      {/* Posts Section */}
       {loading ? (
         <p className="text-center text-muted mt-4">Loading posts...</p>
       ) : posts.length > 0 ? (

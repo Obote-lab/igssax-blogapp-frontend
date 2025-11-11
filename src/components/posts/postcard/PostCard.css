@@ -1,0 +1,131 @@
+/* PostCard Action Bar Styles */ 
+.post-action-bar {
+  gap:8px;
+}
+.post-action-btn {
+  background:transparent;
+  border:none;
+  padding:8px 16px;
+  border-radius:8px;
+  transition:all 0.2s ease;
+  cursor:pointer;
+  position:relative;
+  color:#65676b;
+  font-weight:500;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.post-action-btn:hover {
+  background:rgba(0,0,0,0.05);
+  transform:translateY(-1px);
+}
+.post-action-btn:active {
+  transform:translateY(0);
+}
+.post-action-btn.active {
+  color:#73c2be;
+}
+.action-icon-wrapper {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.2s ease;
+  line-height:1;
+}
+/* Consistent icon sizing for ALL icons */ .action-icon {
+  transition:all 0.2s ease;
+  color:inherit;
+  font-size:18px;
+  width:28px;
+  height:28px;
+  display:block;
+  flex-shrink:0;
+}
+.post-action-btn:hover .action-icon {
+  transform:scale(1.1);
+}
+.post-action-btn.active .action-icon {
+  color:#73c2be;
+  filter:drop-shadow(0 2px 4px rgba(115,194,190,0.3));
+}
+.action-label {
+  font-size:0.9rem;
+  font-weight:500;
+  transition:all 0.2s ease;
+  position:relative;
+  color:inherit;
+  line-height:1.2;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  white-space:nowrap;
+}
+.count-badge {
+  background:#73c2be;
+  /* color:white; */
+  border-radius:10px;
+  padding:1px 6px;
+  font-size:0.75rem;
+  font-weight:600;
+  margin-left:4px;
+  min-width:18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  animation:fadeIn 0.3s ease;
+  line-height:1;
+}
+.reaction-btn.active {
+  background:rgba(115,194,190,0.1);
+}
+.reaction-btn:hover {
+  background:rgba(115,194,190,0.08);
+}
+.comment-btn:hover {
+  background:rgba(32,120,244,0.1);
+  color:#2078f4;
+}
+.share-btn:hover {
+  background:rgba(0,164,0,0.1);
+  color:#00a400;
+}
+.reaction-container {
+  position:relative;
+}
+@keyframes fadeIn {
+  from {
+  opacity:0;
+  transform:scale(0.8);
+}
+to {
+  opacity:1;
+  transform:scale(1);
+}
+}/* Mobile responsiveness */ @media (max-width:768px) {
+  .post-action-bar {
+  gap:4px;
+}
+.post-action-btn {
+  padding:8px 12px;
+  flex-direction:column;
+  gap:4px;
+}
+.action-label {
+  font-size:0.8rem;
+}
+.action-icon {
+  font-size:16px;
+  width:16px;
+  height:16px;
+}
+}/* Dark mode support */ @media (prefers-color-scheme:dark) {
+  .post-action-btn {
+  color:#b0b3b8;
+}
+.post-action-btn:hover {
+  background:rgba(255,255,255,0.1);
+}
+}
